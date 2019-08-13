@@ -3,7 +3,9 @@
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout
-				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%t] [%-4level] %logger{36} - %msg%n" />
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS}[%-4level] - %msg%n" />
+			<!-- <PatternLayout
+					pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%t] [%-4level] %logger{36} - %msg%n" /> -->
 		</Console>
 		<File name="logWarn" fileName="logs/warn.log" append="false">
 			<PatternLayout
@@ -14,12 +16,13 @@
 			pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} [%t] %-5level %logger{36} - %msg%n" 
 			/> </File> -->
 		<RollingFile name="RollingFileInfo" fileName="logs/info.log"
-			filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"  append="false">
 			<!--<PatternLayout
 				  pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%-4level] %class{36} - %M [%L]  - %msg%xEx%n" />-->
+			<!--<PatternLayout
+			pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%-4level] %class{36} - %M [%L]  - %msg%xEx%n" />-->
 			<PatternLayout
-				  pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%-4level]  - %msg%xEx%n" />
-			pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS} [%-4level] %class{36} - %M [%L]  - %msg%xEx%n" />
+					pattern="%msg%xEx%n" />
 			<SizeBasedTriggeringPolicy size="500 MB" />
 		</RollingFile>
 		<File name="logDebug" fileName="logs/debug.log" append="false">

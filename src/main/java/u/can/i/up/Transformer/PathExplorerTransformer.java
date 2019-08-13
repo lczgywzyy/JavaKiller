@@ -1,45 +1,25 @@
-package u.can.i.up;
+package u.can.i.up.Transformer;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import soot.Body;
 import soot.BodyTransformer;
-import soot.G;
 import soot.Unit;
 import soot.jimple.JimpleBody;
 import soot.toolkits.graph.CompleteUnitGraph;
+import u.can.i.up.utils.UnitPair;
 
 import java.util.*;
 
 public class PathExplorerTransformer extends BodyTransformer {
-    public class Pair {
-        private Unit unit;
-        private int level;
 
-        public Pair(Unit u, int i) {
-            unit = u;
-            level = i;
-        }
-
-        public Unit getUnit() {
-            return unit;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        @Override
-        public String toString() {
-            return "LEVEL " + Integer.valueOf(level) + ": " + unit.toString();
-        }
-    }
-
-    private static PathExplorerTransformer instance = new PathExplorerTransformer();
-    private PathExplorerTransformer() {}
     private Logger logger = LogManager.getLogger();
 
-    public static PathExplorerTransformer v() {
+    private volatile static PathExplorerTransformer instance = new PathExplorerTransformer();
+
+    private PathExplorerTransformer() {}
+
+    public static PathExplorerTransformer getInstance() {
         return instance;
     }
 
@@ -53,25 +33,26 @@ public class PathExplorerTransformer extends BodyTransformer {
 //            return;
 //        }
 
+        // TODO 每一个body 对应类中的一个Declared Method.
 //        G.v().out.println("- METHOD: " + body.getMethod().getDeclaration() + " | " + body.getMethod().getDeclaringClass());
         logger.info("- METHOD: " + body.getMethod().getDeclaration() + " | " + body.getMethod().getDeclaringClass());
 
         CompleteUnitGraph stmtGraph = new CompleteUnitGraph(body);
 
-        Stack<Unit> entryPoints = new Stack<Unit>();
+        Stack<Unit> entryPoints = new Stack<>();
         entryPoints.addAll(stmtGraph.getHeads());
 
         while (!entryPoints.empty()) {
-            Stack<Pair> workList = new Stack<Pair>();
+            Stack<UnitPair> workList = new Stack<>();
 
 //            G.v().out.println("NEW ENTRY POINT");
             Unit entry = entryPoints.pop();
 
-            workList.add(new Pair(entry, 1));
-            Set<Unit> traversed = new HashSet<Unit>();
+            workList.add(new UnitPair(entry, 1));
+            Set<Unit> traversed = new HashSet<>();
 
             while (!workList.isEmpty()) {
-                Pair pair = workList.pop();
+                UnitPair pair = workList.pop();
                 Unit stmt = pair.getUnit();
                 int level = pair.getLevel();
 
@@ -82,6 +63,7 @@ public class PathExplorerTransformer extends BodyTransformer {
                 }
 
                 traversed.add(stmt);
+                // TODO 打印当前语句，可以在此处判断语句中是否有特定API调用。
 //                G.v().out.println(pair.toString());
                 logger.info(pair.toString());
 
@@ -91,9 +73,9 @@ public class PathExplorerTransformer extends BodyTransformer {
 //                    G.v().out.println("LAST STATEMENT\n");
                     logger.info("LAST STATEMENT\n");
                 } else {
-                    List<Pair> successorPairs = new ArrayList<Pair>();
-                    for (Iterator<Unit> i = successors.iterator(); i.hasNext();) {
-                        successorPairs.add(new Pair(i.next(), level + 1));
+                    List<UnitPair> successorPairs = new ArrayList<>();
+                    for (Unit successor : successors) {
+                        successorPairs.add(new UnitPair(successor, level + 1));
                     }
                     workList.addAll(successorPairs);
                 }

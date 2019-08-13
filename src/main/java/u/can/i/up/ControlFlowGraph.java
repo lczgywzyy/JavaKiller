@@ -7,6 +7,8 @@ import soot.Scene;
 import soot.SootClass;
 import soot.Transform;
 import soot.options.Options;
+import u.can.i.up.Transformer.IFDSDataFlowTransformer;
+import u.can.i.up.Transformer.PathExplorerTransformer;
 
 import java.util.Collections;
 
@@ -26,6 +28,35 @@ public class ControlFlowGraph {
             }
         }
         return instant;
+    }
+
+    /** @param dir
+     *      bin文件夹路径;
+     * @param classpath
+     *      运行环境，包括jdk中rt.jar、Android SDK中android.jar等；
+     * @param mainClass
+     *      Android 工程主类，主类可能会影响整个代码的控制流图.
+     */
+    public void drawCFGWithCMD(String dir, String classpath, String mainClass) {
+        ControlFlowGraph cfg = ControlFlowGraph.getInstance();
+        String[] args = new String[]{"-process-dir", dir,
+                "-src-prec", "java",
+                "-cp", classpath,
+                "-main-class", mainClass,
+                "-pp",
+                "-app",
+                "-keep-line-number",
+                "-allow-phantom-refs"};
+        cfg.drawCFGWithCMD_PathExplorerTransformer(args);
+    }
+    private void drawCFGWithCMD_PathExplorerTransformer(String[] args){
+        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", PathExplorerTransformer.getInstance()));
+        soot.Main.main(args);
+    }
+
+    private void drawCFGWithCMD_IFDSDataFlowTransformer(String[] args){
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new IFDSDataFlowTransformer()));
+        soot.Main.main(args);
     }
 
     private static void initial(String src_path, String mainClass) {
@@ -50,17 +81,10 @@ public class ControlFlowGraph {
         Scene.v().loadNecessaryClasses();
     }
 
-    public void drawCFGWithCMD_PathExplorerTransformer(String[] args){
-        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", PathExplorerTransformer.v()));
-        soot.Main.main(args);
-    }
-    public void drawCFGWithCMD_IFDSDataFlowTransformer(String[] args){
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new IFDSDataFlowTransformer()));
-        soot.Main.main(args);
-    }
     public void drawCFGWithAPI(String src_path, String mainClass){
         initial(src_path, mainClass);
         SootClass appclass = Scene.v().loadClassAndSupport("MainActivity");//若无法找到，则生成一个。
         logger.info("" + appclass.getName());
     }
+
 }

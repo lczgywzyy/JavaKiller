@@ -28,7 +28,7 @@ public class MainTest {
                 "-keep-line-number",
                 "-allow-phantom-refs"};
         String[] args2 = new String[]{"--help"};
-        cfg.drawCFGWithCMD_PathExplorerTransformer(args1);
+//        cfg.drawCFGWithCMD_PathExplorerTransformer(args1);
 //        cfg.drawCFGWithCMD_IFDSDataFlowTransformer(args1);
     }
     @Test
