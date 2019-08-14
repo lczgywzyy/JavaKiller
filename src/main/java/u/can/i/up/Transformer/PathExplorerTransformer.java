@@ -46,6 +46,7 @@ public class PathExplorerTransformer extends BodyTransformer {
             Stack<UnitPair> workList = new Stack<>();
 
 //            G.v().out.println("NEW ENTRY POINT");
+            logger.info("---> NEW ENTRY POINT");
             Unit entry = entryPoints.pop();
 
             workList.add(new UnitPair(entry, 1));
@@ -58,7 +59,7 @@ public class PathExplorerTransformer extends BodyTransformer {
 
                 if (traversed.contains(stmt)) {
 //                    G.v().out.println("BACKEDGE\n");
-                    logger.info("BACKEDGE\n");
+                    logger.info("<--- BACKEDGE\n");
                     continue;
                 }
 
@@ -71,7 +72,7 @@ public class PathExplorerTransformer extends BodyTransformer {
 
                 if (successors.isEmpty()) {
 //                    G.v().out.println("LAST STATEMENT\n");
-                    logger.info("LAST STATEMENT\n");
+                    logger.info("==== LAST STATEMENT\n");
                 } else {
                     List<UnitPair> successorPairs = new ArrayList<>();
                     for (Unit successor : successors) {
