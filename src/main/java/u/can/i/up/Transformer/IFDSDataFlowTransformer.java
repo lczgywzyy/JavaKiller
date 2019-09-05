@@ -20,11 +20,11 @@ public class IFDSDataFlowTransformer extends SceneTransformer {
     protected void internalTransform(String phaseName, Map<String, String> options) {
         JimpleBasedInterproceduralCFG icfg= new JimpleBasedInterproceduralCFG();
         IFDSTabulationProblem<Unit, Pair<Value,
-                                Set<DefinitionStmt>>, SootMethod,
-                        InterproceduralCFG<Unit, SootMethod>> problem = new IFDSReachingDefinitions(icfg);
+                Set<DefinitionStmt>>, SootMethod,
+                InterproceduralCFG<Unit, SootMethod>> problem = new IFDSReachingDefinitions(icfg);
 
         IFDSSolver<Unit, Pair<Value, Set<DefinitionStmt>>,
-                        SootMethod, InterproceduralCFG<Unit, SootMethod>> solver =
+                SootMethod, InterproceduralCFG<Unit, SootMethod>> solver =
                 new IFDSSolver<Unit, Pair<Value, Set<DefinitionStmt>>, SootMethod,
                         InterproceduralCFG<Unit, SootMethod>>(problem);
 

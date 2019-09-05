@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import soot.*;
 import soot.options.Options;
+import u.can.i.up.Graph.ControlFlowGraph;
 
 import java.util.ArrayList;
 import java.util.Collections;

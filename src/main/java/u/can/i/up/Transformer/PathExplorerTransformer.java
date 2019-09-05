@@ -29,7 +29,7 @@ public class PathExplorerTransformer extends BodyTransformer {
         JimpleBody body = (JimpleBody) b;
 
         // For debug...
-//        if(!body.getMethod().getDeclaringClass().getName().startsWith("com.coconuttest.tyu91.coconuttest")){
+//        if(!body.getMethod().getDeclaringClass().getName().startsWith("com.coconuttest.tyu91.coconuttest.SmsTestActivity")){
 //            return;
 //        }
 

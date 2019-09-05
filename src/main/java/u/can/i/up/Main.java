@@ -1,11 +1,14 @@
 package u.can.i.up;
 
+import u.can.i.up.Graph.ControlFlowGraph;
+
 public class Main {
 
     public static void main(String [] args){
 
-        // bin/classed文件夹
+        // bin/classes文件夹
         String dir = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
+//        String dir = "/Users/lczgywzyy/Projects/ASProj/Haven-HSTest/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
 
         // 运行环境，包括jdk中rt.jar、Android SDK中android.jar等，路径中间用":"拼接；
         String classpath = "/Library/Java/JavaVirtualMachines/jdk1.8.0_211.jdk/Contents/Home/jre/lib/rt.jar:/Users/lczgywzyy/Library/Android/sdk/platforms/android-29/android.jar";
