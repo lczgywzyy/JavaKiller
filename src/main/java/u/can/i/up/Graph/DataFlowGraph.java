@@ -4,8 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import soot.*;
 import soot.options.Options;
+import u.can.i.up.Transformer.AnalysisTransformer;
 import u.can.i.up.Transformer.IFDSDataFlowTransformer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -85,26 +87,42 @@ public class DataFlowGraph {
 
     // TODO CMD
     public void drawDFGWithCMD(String src_path, String classpath, String mainClass){
-        String[] args = new String[]{"-process-dir", src_path,
+        String[] args_1 = new String[]{"-process-dir", src_path,
                 "-src-prec", "java",
                 "-cp", classpath,
-                "-w",
+//                "-w",
                 "-main-class", mainClass,
                 "-pp",
                 "-app",
                 "-keep-line-number",
                 "-allow-phantom-refs"};
+        String[] args_2 = new String[]{
+                "-process-dir", src_path,
+                "-cp", Scene.v().defaultClassPath() + File.pathSeparator + classpath, "-pp",
+                "-w", 						// 执行整个程序分析
+                "-src-prec", "java",		// 指定源文件类型
+                "-main-class", mainClass,	// 指定主类
+                "-pp",
+                "-f", "J", 					// 指定输出文件类型
+                mainClass
+        };
         String[] args_help = new String[]{"--help"};
-        drawDFGWithCMD_IFDSDataFlowTransformer(args);
+        drawDFGWithCMD_IFDSDataFlowTransformer(args_1);
     }
 
     private void drawDFGWithCMD_IFDSDataFlowTransformer(String[] args){
+        System.err.println("111");
+
 //        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new SceneTransformer() {
-            protected void internalTransform(String phaseName, Map options) {
-                System.err.println(Scene.v().getApplicationClasses());
-            }
-        }));
+
+        //        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new SceneTransformer() {
+//            protected void internalTransform(String phaseName, Map options) {
+//                System.err.println(Scene.v().getApplicationClasses());
+//            }
+//        }));
+        AnalysisTransformer analysisTransformer = new AnalysisTransformer();
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", IFDSDataFlowTransformer.getInstance()));
         soot.Main.main(args);
+        System.err.println("222");
     }
 }
