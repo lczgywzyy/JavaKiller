@@ -18,12 +18,12 @@ public class Main {
 //        String mainClass = "com.coconuttest.tyu91.coconuttest.MainActivity";
         String mainClass = "MainActivity";
 
-//        ControlFlowGraph cfg = ControlFlowGraph.getInstance();
-//        cfg.drawCFGWithCMD(dir, classpath, mainClass);
+        ControlFlowGraph cfg = ControlFlowGraph.getInstance();
+        cfg.drawCFGWithCMD(dir, classpath, mainClass);
 
-        DataFlowGraph dfg = DataFlowGraph.getInstance();
+//        DataFlowGraph dfg = DataFlowGraph.getInstance();
 //        dfg.drawDFGWithCMD(dir, classpath, mainClass);
-        dfg.drawDFGWithAPI(dir, classpath, mainClass);
+//        dfg.drawDFGWithAPI(dir, classpath, mainClass);
     }
 
 

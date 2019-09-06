@@ -136,8 +136,7 @@ public class DataFlowGraph {
 //                System.err.println(Scene.v().getApplicationClasses());
 //            }
 //        }));
-        AnalysisTransformer analysisTransformer = new AnalysisTransformer();
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", analysisTransformer));
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", AnalysisTransformer.getInstance()));
         soot.Main.main(args);
         System.err.println("222");
     }

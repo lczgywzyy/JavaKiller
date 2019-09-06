@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import soot.PackManager;
 import soot.Transform;
-import u.can.i.up.Transformer.PathExplorerTransformer;
+import u.can.i.up.Transformer.ControlFlowTransformer;
 
 public class ControlFlowGraph {
 
@@ -43,11 +43,10 @@ public class ControlFlowGraph {
                 "-allow-phantom-refs"};
         cfg.drawCFGWithCMD_PathExplorerTransformer(args);
     }
+
     private void drawCFGWithCMD_PathExplorerTransformer(String[] args){
-        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", PathExplorerTransformer.getInstance()));
+        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", ControlFlowTransformer.getInstance()));
+//        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", AnalysisTransformer.getInstance()));
         soot.Main.main(args);
     }
-
-
-
 }

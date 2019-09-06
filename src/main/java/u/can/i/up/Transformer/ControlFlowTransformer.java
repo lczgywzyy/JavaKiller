@@ -11,15 +11,15 @@ import u.can.i.up.utils.UnitPair;
 
 import java.util.*;
 
-public class PathExplorerTransformer extends BodyTransformer {
+public class ControlFlowTransformer extends BodyTransformer {
 
     private Logger logger = LogManager.getLogger();
 
-    private volatile static PathExplorerTransformer instance = new PathExplorerTransformer();
+    private volatile static ControlFlowTransformer instance = new ControlFlowTransformer();
 
-    private PathExplorerTransformer() {}
+    private ControlFlowTransformer() {}
 
-    public static PathExplorerTransformer getInstance() {
+    public static ControlFlowTransformer getInstance() {
         return instance;
     }
 

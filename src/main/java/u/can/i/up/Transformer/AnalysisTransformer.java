@@ -1,17 +1,22 @@
 package u.can.i.up.Transformer;
 
-import soot.*;
-import soot.toolkits.graph.BriefUnitGraph;
-import soot.toolkits.graph.UnitGraph;
-import soot.toolkits.scalar.FlowSet;
-import u.can.i.up.Analysis.ReachingDefinitionAnalysis;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import soot.SceneTransformer;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 
 public class AnalysisTransformer extends SceneTransformer {
+
+    private volatile static AnalysisTransformer instance = new AnalysisTransformer();
+
+    private AnalysisTransformer() {}
+
+    public static AnalysisTransformer getInstance() {
+        return instance;
+    }
+
+    private Logger logger = LogManager.getLogger();
 
     @Override
     protected void internalTransform(String arg0, Map arg1)   {
