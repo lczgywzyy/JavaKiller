@@ -37,9 +37,9 @@ public class MainTest {
         String dir = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
         String mainClass = "MainActivity";
         ControlFlowGraph cfg = ControlFlowGraph.getInstance();
-        cfg.drawCFGWithAPI(dir, mainClass);
+        cfg.drawCFGWithCMD(dir, "", mainClass);
     }
-    @Test
+
     public void drawCFGWithAPI2(){
         String process_dir = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
         String mainClass = "MainActivity";

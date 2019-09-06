@@ -2,14 +2,12 @@ package u.can.i.up.Graph;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import soot.PackManager;
-import soot.Scene;
-import soot.SootClass;
-import soot.Transform;
+import soot.*;
 import soot.options.Options;
 import u.can.i.up.Transformer.IFDSDataFlowTransformer;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class DataFlowGraph {
 
@@ -29,37 +27,84 @@ public class DataFlowGraph {
         return instant;
     }
 
-    public void drawDFGWithAPI(String src_path, String mainClass){
-        initial(src_path, mainClass);
-        SootClass appclass = Scene.v().loadClassAndSupport("MainActivity");//若无法找到，则生成一个。
-        logger.info("" + appclass.getName());
+    // TODO API
+    public void drawDFGWithAPI(String src_path, String classpath, String mainClass){
+        initial(src_path, classpath, mainClass);
+        drawDFGWithAPI_IFDSDataFlowTransformer();
     }
 
-
-    private static void initial(String src_path, String mainClass) {
+    private static void initial(String src_path, String classpath, String mainClass) {
         soot.G.reset();
-        Options.v().set_allow_phantom_refs(true);
-        Options.v().set_prepend_classpath(true);
-        Options.v().set_validate(true);
-        Options.v().set_output_format(Options.output_format_jimple);
-        Options.v().set_output_dir("sootOutput");
+
+        // Set Soot's SRC_PATH
+        ArrayList<String> src_path_list = new ArrayList<>();
+        src_path_list.add(src_path);
+        Options.v().set_process_dir(src_path_list);
+
+        // Set Soot's language
         Options.v().set_src_prec(Options.src_prec_java);
-        Options.v().set_android_jars("/Users/lczgywzyy/Library/Android/sdk/platforms");
-        Options.v().set_process_dir(Collections.singletonList(src_path));//路径应为文件夹
-        Options.v().set_keep_line_number(true);
+
+        // Set Soot's internal classpath
+        Options.v().set_soot_classpath(classpath);
+
+        // Enable whole-program mode
         Options.v().set_whole_program(true);
-        Options.v().set_no_bodies_for_excluded(true);
-        Options.v().set_soot_classpath(Scene.v().getSootClassPath()+ ":/Users/lczgywzyy/Library/Android/sdk/platforms/android-29/android.jar");
         Options.v().set_app(true);
-//        Scene.v().setMainClass(Scene.v().loadClass(mainClass, SootClass.BODIES)); // how to make it work ?
-        Scene.v().addBasicClass("java.io.PrintStream", SootClass.SIGNATURES);
-        Scene.v().addBasicClass("java.lang.System", SootClass.SIGNATURES);
-        Scene.v().addBasicClass("java.lang.Thread", SootClass.SIGNATURES);
-        Scene.v().loadNecessaryClasses();
+
+        // Call-graph options
+        Options.v().setPhaseOption("cg", "safe-newinstance:true");
+        Options.v().setPhaseOption("cg.cha","enabled:false");
+
+        // Enable SPARK call-graph construction
+        Options.v().setPhaseOption("cg.spark","enabled:true");
+        Options.v().setPhaseOption("cg.spark","verbose:true");
+        Options.v().setPhaseOption("cg.spark","on-fly-cg:true");
+
+        Options.v().set_allow_phantom_refs(true);
+
+        Options.v().set_keep_line_number(true);
+
+        // Set the main class of the application to be analysed
+        Options.v().set_main_class(mainClass);
+
+        // Load the main class
+        SootClass c = Scene.v().loadClass(mainClass, SootClass.BODIES);
+        c.setApplicationClass();
+
+        // Load the "main" method of the main class and set it as a Soot entry point
+//        SootMethod entryPoint = c.getMethodByName("onCreate");
+//        List<SootMethod> entryPoints = new ArrayList<SootMethod>();
+//        entryPoints.add(entryPoint);
+//        Scene.v().setEntryPoints(entryPoints);
+    }
+
+    private void drawDFGWithAPI_IFDSDataFlowTransformer(){
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
+        soot.Main.main(new String[]{});
+    }
+
+    // TODO CMD
+    public void drawDFGWithCMD(String src_path, String classpath, String mainClass){
+        String[] args = new String[]{"-process-dir", src_path,
+                "-src-prec", "java",
+                "-cp", classpath,
+                "-w",
+                "-main-class", mainClass,
+                "-pp",
+                "-app",
+                "-keep-line-number",
+                "-allow-phantom-refs"};
+        String[] args_help = new String[]{"--help"};
+        drawDFGWithCMD_IFDSDataFlowTransformer(args);
     }
 
     private void drawDFGWithCMD_IFDSDataFlowTransformer(String[] args){
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new IFDSDataFlowTransformer()));
+//        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new SceneTransformer() {
+            protected void internalTransform(String phaseName, Map options) {
+                System.err.println(Scene.v().getApplicationClasses());
+            }
+        }));
         soot.Main.main(args);
     }
 }
