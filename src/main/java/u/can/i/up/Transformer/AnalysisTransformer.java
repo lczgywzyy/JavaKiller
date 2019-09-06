@@ -16,6 +16,8 @@ public class AnalysisTransformer extends SceneTransformer {
     @Override
     protected void internalTransform(String arg0, Map arg1)   {
 
+        System.err.println("Scene.v().getApplicationClasses()");
+
         /**
         // 我们首先获取Main方法，因为我们的分析应当从Main方法开始
         SootMethod sMethod = Scene.v().getMainMethod();

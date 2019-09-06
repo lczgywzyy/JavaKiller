@@ -28,7 +28,7 @@ public class IFDSDataFlowTransformer extends SceneTransformer {
 
     @Override
     protected void internalTransform(String phaseName, Map<String, String> options) {
-        System.err.println(Scene.v().getApplicationClasses());
+        System.err.println("Scene.v().getApplicationClasses()");
 //        logger.info("aaa");
 //        JimpleBasedInterproceduralCFG icfg= new JimpleBasedInterproceduralCFG();
 //        IFDSTabulationProblem<Unit, Pair<Value,

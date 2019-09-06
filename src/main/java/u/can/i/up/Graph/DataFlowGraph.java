@@ -9,6 +9,7 @@ import u.can.i.up.Transformer.IFDSDataFlowTransformer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DataFlowGraph {
@@ -46,6 +47,8 @@ public class DataFlowGraph {
         // Set Soot's language
         Options.v().set_src_prec(Options.src_prec_java);
 
+        Options.v().set_output_format(Options.output_format_jimple);
+
         // Set Soot's internal classpath
         Options.v().set_soot_classpath(classpath);
 
@@ -54,6 +57,7 @@ public class DataFlowGraph {
         Options.v().set_app(true);
 
         // Call-graph options
+        Options.v().setPhaseOption("wjtp", "on");
         Options.v().setPhaseOption("cg", "safe-newinstance:true");
         Options.v().setPhaseOption("cg.cha","enabled:false");
 
@@ -70,19 +74,31 @@ public class DataFlowGraph {
         Options.v().set_main_class(mainClass);
 
         // Load the main class
-        SootClass c = Scene.v().loadClass(mainClass, SootClass.BODIES);
+        SootClass c = Scene.v().forceResolve(mainClass, SootClass.BODIES);
         c.setApplicationClass();
+        Scene.v().loadNecessaryClasses();
 
         // Load the "main" method of the main class and set it as a Soot entry point
 //        SootMethod entryPoint = c.getMethodByName("onCreate");
 //        List<SootMethod> entryPoints = new ArrayList<SootMethod>();
 //        entryPoints.add(entryPoint);
 //        Scene.v().setEntryPoints(entryPoints);
+
+        List<SootMethod> entryPoints = new ArrayList<SootMethod>();
+        for (SootClass currentClass : Scene.v().getClasses()) {
+            for (SootMethod method : currentClass.getMethods()) {
+                if (method.hasActiveBody()) {
+                    entryPoints.add(method);
+                }
+            }
+        }
+        Scene.v().setEntryPoints(entryPoints);
     }
 
     private void drawDFGWithAPI_IFDSDataFlowTransformer(){
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
-        soot.Main.main(new String[]{});
+//        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
+        PackManager.v().runPacks();
+//        soot.Main.main(new String[]{});
     }
 
     // TODO CMD
@@ -90,10 +106,11 @@ public class DataFlowGraph {
         String[] args_1 = new String[]{"-process-dir", src_path,
                 "-src-prec", "java",
                 "-cp", classpath,
-//                "-w",
+                "-w",
                 "-main-class", mainClass,
                 "-pp",
                 "-app",
+                "-p", "wjtp",
                 "-keep-line-number",
                 "-allow-phantom-refs"};
         String[] args_2 = new String[]{
@@ -102,7 +119,6 @@ public class DataFlowGraph {
                 "-w", 						// 执行整个程序分析
                 "-src-prec", "java",		// 指定源文件类型
                 "-main-class", mainClass,	// 指定主类
-                "-pp",
                 "-f", "J", 					// 指定输出文件类型
                 mainClass
         };
@@ -121,7 +137,7 @@ public class DataFlowGraph {
 //            }
 //        }));
         AnalysisTransformer analysisTransformer = new AnalysisTransformer();
-        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", IFDSDataFlowTransformer.getInstance()));
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", analysisTransformer));
         soot.Main.main(args);
         System.err.println("222");
     }
