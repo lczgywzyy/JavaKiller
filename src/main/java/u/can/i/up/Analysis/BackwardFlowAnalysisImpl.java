@@ -1,4 +1,4 @@
-package u.can.i.up.Graph;
+package u.can.i.up.Analysis;
 
 import soot.Local;
 import soot.Unit;
