@@ -8,7 +8,9 @@ public class Main {
     public static void main(String[] args){
 
         // bin/classes文件夹
+        String dir_CFG = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
         String dir = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
+//        String dir = "/Users/lczgywzyy/Projects/ASProj/CoconutTest/app/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
 //        String dir = "/Users/lczgywzyy/Projects/ASProj/Haven-HSTest/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes";
 
         // 运行环境，包括jdk中rt.jar、Android SDK中android.jar等，路径中间用":"拼接；
@@ -19,7 +21,7 @@ public class Main {
         String mainClass = "MainActivity";
 
         ControlFlowGraph cfg = ControlFlowGraph.getInstance();
-        cfg.drawCFGWithCMD(dir, classpath, mainClass);
+        cfg.drawCFGWithCMD(dir_CFG, classpath, mainClass);
 
 //        DataFlowGraph dfg = DataFlowGraph.getInstance();
 //        dfg.drawDFGWithCMD(dir, classpath, mainClass);

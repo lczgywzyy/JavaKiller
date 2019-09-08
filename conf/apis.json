@@ -1,0 +1,19 @@
+{
+  "API": [
+    {
+      "ruleId": 101,
+      "apiName": "query",
+      "declaringClass": "android.content.ContentResolver",
+      "description": "The description ...",
+      "parameterTypes": [
+        {
+          "className": "android.net.Uri"
+        },
+        {
+          "className": "java.lang.String"
+        }
+      ],
+      "returnType": "android.database.Cursor"
+    }
+  ]
+}

@@ -46,8 +46,8 @@ public class ControlFlowGraph {
     }
 
     private void drawCFGWithCMD_PathExplorerTransformer(String[] args){
-//        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", ControlFlowTransformer.getInstance()));
-        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", DataFlowTransformer.getInstance()));
+        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", ControlFlowTransformer.getInstance()));
+//        PackManager.v().getPack("jtp").add(new Transform("jtp.propagator", DataFlowTransformer.getInstance()));
 //        PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", AnalysisTransformer.getInstance()));
         soot.Main.main(args);
     }

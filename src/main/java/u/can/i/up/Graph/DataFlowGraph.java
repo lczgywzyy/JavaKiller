@@ -109,7 +109,7 @@ public class DataFlowGraph {
                 "-w",
                 "-main-class", mainClass,
                 "-pp",
-                "-app",
+//                "-app",
                 "-p", "wjtp",
                 "-keep-line-number",
                 "-allow-phantom-refs"};
@@ -129,13 +129,13 @@ public class DataFlowGraph {
     private void drawDFGWithCMD_IFDSDataFlowTransformer(String[] args){
         System.err.println("111");
 
-//        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", IFDSDataFlowTransformer.getInstance()));
 
-        //        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds", new SceneTransformer() {
-//            protected void internalTransform(String phaseName, Map options) {
-//                System.err.println(Scene.v().getApplicationClasses());
-//            }
-//        }));
+        PackManager.v().getPack("wjtp").add(new Transform("wjtp.herosifds1", new SceneTransformer() {
+            protected void internalTransform(String phaseName, Map options) {
+                System.err.println(Scene.v().getApplicationClasses());
+            }
+        }));
         PackManager.v().getPack("wjtp").add(new Transform("wjtp.dfa", AnalysisTransformer.getInstance()));
         soot.Main.main(args);
         System.err.println("222");
