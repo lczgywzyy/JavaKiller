@@ -1,25 +1,21 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+//        mavenCentral()
+        maven { url 'https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-snapshot/' }
+        maven { url 'https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release/' }
+        jcenter()
+    }
+    dependencies {
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
 }
 
-group 'u.can.i.up'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    maven { url 'https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release/' }
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'org.apache.logging.log4j:log4j-api:2.0'
-    compile 'org.apache.logging.log4j:log4j-core:2.0'
-    compile group: 'ca.mcgill.sable', name: 'soot', version: '3.2.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'de.tud.sse:soot-infoflow-android:2.7.1'
-    implementation 'de.tud.sse:soot-infoflow-summaries:2.7.1'
-    implementation 'heros:heros:1.0.1-SNAPSHOT'
-    //    compile fileTree(dir: 'lib', includes: ['*.jar'])
+allprojects {
+    repositories {
+//        mavenCentral()
+        maven { url 'https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-snapshot/' }
+        maven { url 'https://soot-build.cs.uni-paderborn.de/nexus/repository/soot-release/' }
+        jcenter()
+    }
 }
